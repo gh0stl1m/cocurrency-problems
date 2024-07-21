@@ -6,7 +6,7 @@ import (
 )
 func main() {
 
-  fmt.Println("Excercise 1. Running Sequential exection Problem");
+  fmt.Println("Excercise 1: Running Sequential exection Problem");
   pkg.SequentialExecution()
 }
 

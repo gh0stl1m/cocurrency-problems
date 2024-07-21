@@ -5,9 +5,10 @@ import (
   "sync"
 )
 
-var wg sync.WaitGroup
 
 func SequentialExecution() {
+
+  var wg sync.WaitGroup
 
   evenCh, oddCh := make(chan bool, 1), make(chan bool, 1)
   defer close(evenCh)
@@ -16,15 +17,15 @@ func SequentialExecution() {
   wg = sync.WaitGroup{}
   wg.Add(2)
 
-  go even(evenCh, oddCh)
-  go odd(oddCh, evenCh)
+  go even(&wg, evenCh, oddCh)
+  go odd(&wg, oddCh, evenCh)
 
   evenCh <- true
 
   wg.Wait()
 }
 
-func even(evenCh, oddCh chan bool) {
+func even(wg *sync.WaitGroup, evenCh, oddCh chan bool) {
 
   defer wg.Done()
   for i := 2; i <= 5; i += 2 {
@@ -34,7 +35,7 @@ func even(evenCh, oddCh chan bool) {
   }
 }
 
-func odd(oddCh, evenCh chan bool) {
+func odd(wg *sync.WaitGroup, oddCh, evenCh chan bool) {
 
   defer wg.Done()
   for i := 1; i <= 5; i += 2 {
